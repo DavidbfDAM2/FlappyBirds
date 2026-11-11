@@ -16,6 +16,16 @@ public class BirdPhysics : MonoBehaviour
     float force = 200.0f;
 
     const int MAXLIVES = 5;
+    int score = 0;
+    
+    public int CurrentLives
+    {
+        get { return this.currentLives; }
+    }
+    public int Score 
+    {
+        get { return this.score; }
+    }
     Rigidbody2D birdBody;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,6 +56,7 @@ public class BirdPhysics : MonoBehaviour
             Heal();
             Destroy(collision.gameObject);
         }
+        
         EnemyBirdPhysics enemy = collision.GetComponentInParent<EnemyBirdPhysics>();
         if(enemy != null)
         {
@@ -53,7 +64,11 @@ public class BirdPhysics : MonoBehaviour
             collision.enabled = false;
             enemy.ReceiveHit();
         }
-        
+        if (collision.gameObject.GetComponent<ScorePickup>()) 
+        {
+            AddScore();
+            Destroy(collision.gameObject);
+        }
 
     }
     void TakeDamage() 
@@ -75,5 +90,11 @@ public class BirdPhysics : MonoBehaviour
     public bool NeedsHealing() 
     {
         return currentLives < MAXLIVES;
+    }
+
+    void AddScore() 
+    {
+        score = score + 10;
+        Debug.Log(score);
     }
 }
