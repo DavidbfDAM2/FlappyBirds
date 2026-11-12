@@ -15,6 +15,9 @@ public class GameHUD : MonoBehaviour
     
     [SerializeField]
     TMP_Text scoreText;
+    
+    [SerializeField]
+    TMP_Text obstaclesText;
 
     private float gameTime = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,8 +35,9 @@ public class GameHUD : MonoBehaviour
         int minutes = (totalSeconds / 60) % 60;
         int seconds = totalSeconds % 60;
 
-        livesText.text = $"Vides: {playerBird.CurrentLives}";
+        obstaclesText.text = $"Obstacles superats: {playerBird.ObstaclesPassed}";
         scoreText.text = $"Puntuació: {playerBird.Score}";
+        livesText.text = $"Vides: {playerBird.CurrentLives}";
         timeText.text = $"Temps de partida: {hours:00}:{minutes:00}:{seconds:00}";
     }
 }

@@ -17,6 +17,7 @@ public class BirdPhysics : MonoBehaviour
 
     const int MAXLIVES = 5;
     int score = 0;
+    int obstaclePassed = 0;
     
     public int CurrentLives
     {
@@ -25,6 +26,10 @@ public class BirdPhysics : MonoBehaviour
     public int Score 
     {
         get { return this.score; }
+    }
+    public int ObstaclesPassed 
+    {
+        get { return obstaclePassed; }
     }
     Rigidbody2D birdBody;
 
@@ -96,5 +101,10 @@ public class BirdPhysics : MonoBehaviour
     {
         score = score + 10;
         Debug.Log(score);
+    }
+    public void RegisterPassedObstacle() 
+    {
+        obstaclePassed++;
+        Debug.Log(obstaclePassed);
     }
 }
