@@ -10,12 +10,15 @@ public class EnemySpawner : MonoBehaviour
     Camera mainCamera;
 
     [SerializeField]
-    float spawnTime = 4f;
-   
+    float minSpawnTime = 3f;
+
+    [SerializeField]
+    float maxSpawnTime = 5f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        InvokeRepeating("SpawnEnemy", 2.5f, spawnTime);
+        Invoke(nameof(SpawnEnemy), 2.5f);
     }
 
     // Update is called once per frame
@@ -33,5 +36,8 @@ public class EnemySpawner : MonoBehaviour
         float rightEdge = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect;
         Vector3 spawnPosition = new Vector3(rightEdge + 1f, randomY, 0f);
         Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        
+        float nextSpawnTime = Random.Range(minSpawnTime, maxSpawnTime);
+        Invoke(nameof(SpawnEnemy), nextSpawnTime);
     }
 }

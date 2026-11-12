@@ -9,8 +9,11 @@ public class ObstacleSpawner : MonoBehaviour
     Camera mainCamera;
 
     [SerializeField]
-    float spawnTime = 4f;
-    
+    float minSpawnTime = 1f;
+
+    [SerializeField]
+    float maxSpawnTime = 3f;
+
     [SerializeField]
     float minHeightSpawn = 2f;
 
@@ -20,7 +23,7 @@ public class ObstacleSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        InvokeRepeating("SpawnObstacle", 1f, spawnTime);
+        Invoke(nameof(SpawnObstacle), 1f);
     }
 
     // Update is called once per frame
@@ -35,6 +38,8 @@ public class ObstacleSpawner : MonoBehaviour
         float rightEdge = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect;
         Vector3 spawnPosition = new Vector3(rightEdge + 1f, randomY, 0f);
         Instantiate(obstaclePrefab, spawnPosition, Quaternion.identity);
-
+        
+        float nextSpawnTime = Random.Range(minSpawnTime, maxSpawnTime);
+        Invoke(nameof(SpawnObstacle), nextSpawnTime);
     }
 }

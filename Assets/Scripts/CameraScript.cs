@@ -4,16 +4,30 @@ public class CameraScript : MonoBehaviour
 {
     [SerializeField]
     Transform targetBird;
+    
+    [SerializeField]
+    float maxOffset = 0.5f;
 
+    [SerializeField]
+    float smoothTime = 0.25f;
+
+    BirdPhysics birdPhysics;
+
+    float currentOffset;
+    float offsetVelocity;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        birdPhysics = targetBird.GetComponent<BirdPhysics>();
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = new Vector3(targetBird.position.x, transform.position.y, transform.position.z);        
+        float targetOffset = -birdPhysics.HorizontalInput * maxOffset;
+
+        currentOffset = Mathf.SmoothDamp(currentOffset, targetOffset, ref offsetVelocity, smoothTime);
+
+        transform.position = new Vector3(targetBird.position.x + currentOffset, transform.position.y, transform.position.z);
     }
 }

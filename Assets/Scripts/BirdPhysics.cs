@@ -14,11 +14,21 @@ public class BirdPhysics : MonoBehaviour
     //Flap force
     [SerializeField]
     float force = 200.0f;
+    
+    [SerializeField]
+    float slowSpeed = 1.0f;
 
+    [SerializeField]
+    float fastSpeed = 3.0f;
+
+    float horizontalInput;
     const int MAXLIVES = 5;
     int score = 0;
     int obstaclePassed = 0;
-    
+    public float HorizontalInput
+    {
+        get { return horizontalInput; }
+    }
     public int CurrentLives
     {
         get { return this.currentLives; }
@@ -43,11 +53,22 @@ public class BirdPhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) 
+        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) 
         {
             // Flap cap amunt
             birdBody.AddForce(Vector2.up * force);
-        }        
+        }
+        horizontalInput = 0f;
+
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            horizontalInput += 1f;
+        }
+
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            horizontalInput -= 1f;
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -106,5 +127,20 @@ public class BirdPhysics : MonoBehaviour
     {
         obstaclePassed++;
         Debug.Log(obstaclePassed);
+    }
+    void FixedUpdate()
+    {
+        float targetSpeed = speed;
+
+        if (horizontalInput > 0f)
+        {
+            targetSpeed = fastSpeed;
+        }
+        else if (horizontalInput < 0f)
+        {
+            targetSpeed = slowSpeed;
+        }
+
+        birdBody.linearVelocity = new Vector2(targetSpeed, birdBody.linearVelocity.y);
     }
 }

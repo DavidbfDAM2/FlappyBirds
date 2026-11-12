@@ -425,7 +425,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 6486535727591629347, guid: 2ad6aaff19bfabe4fa88384ed06bf6b3, type: 3}
   mainCamera: {fileID: 519420031}
-  spawnTime: 4
+  minSpawnTime: 2.5
+  maxSpawnTime: 5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,6 +534,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   targetBird: {fileID: 599237850}
+  maxOffset: 2
+  smoothTime: 1
 --- !u!1 &599237845
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,8 +729,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   currentLives: 5
-  speed: 2
+  speed: 3
   force: 200
+  slowSpeed: 1.5
+  fastSpeed: 6
 --- !u!1 &682626674
 GameObject:
   m_ObjectHideFlags: 0
@@ -1146,9 +1151,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleSpawner
   obstaclePrefab: {fileID: 6122989414059260220, guid: 670ac8781cf75534d906d40785e3f8ee, type: 3}
   mainCamera: {fileID: 519420031}
-  spawnTime: 2.5
-  minHeightSpawn: -5
-  maxHeightSpawn: 8
+  minSpawnTime: 1
+  maxSpawnTime: 2.5
+  minHeightSpawn: -4
+  maxHeightSpawn: 7
 --- !u!1 &1273588705
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,7 +1338,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScorePickupSpawner
   scorePickupPrefab: {fileID: 1775258875641382700, guid: 975adbd0fba57534fbe741618e05c191, type: 3}
   mainCamera: {fileID: 519420031}
-  spawnTime: 3
+  minSpawnTime: 1.5
+  maxSpawnTime: 3
 --- !u!1001 &1486962990
 PrefabInstance:
   m_ObjectHideFlags: 0
