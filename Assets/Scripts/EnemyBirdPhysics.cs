@@ -34,10 +34,10 @@ public class EnemyBirdPhysics : MonoBehaviour
             isActivated = true;
             enemyBody.linearVelocity = Vector2.left * speed;
         }
-        float leftEdge = mainCamera.transform.position.x - mainCamera.orthographicSize * mainCamera.aspect;
+        
         float bottomEdge = mainCamera.transform.position.y - mainCamera.orthographicSize;
 
-        if (transform.position.x < leftEdge - 1f || transform.position.y < bottomEdge - 1f)
+        if (transform.position.y < bottomEdge - 1f)
         {
             Destroy(gameObject);
         }

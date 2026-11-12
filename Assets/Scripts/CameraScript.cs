@@ -6,15 +6,16 @@ public class CameraScript : MonoBehaviour
     Transform targetBird;
     
     [SerializeField]
-    float maxOffset = 0.5f;
+    float maxOffset;
 
     [SerializeField]
-    float smoothTime = 0.25f;
+    float smoothTime;
 
     BirdPhysics birdPhysics;
 
     float currentOffset;
     float offsetVelocity;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

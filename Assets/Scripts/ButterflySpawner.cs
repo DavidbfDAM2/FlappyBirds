@@ -9,7 +9,7 @@ public class ButterflySpawner : MonoBehaviour
     Camera mainCamera;
 
     [SerializeField]
-    float spawnTime = 4f;
+    float spawnTime;
 
     [SerializeField]
     BirdPhysics playerBird;

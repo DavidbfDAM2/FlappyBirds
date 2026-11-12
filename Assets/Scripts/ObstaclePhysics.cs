@@ -9,7 +9,6 @@ public class ObstaclePhysics : MonoBehaviour
     float timeBetweenReverse = 0f;
 
     Rigidbody2D obstacleBody;
-    private Camera mainCamera;
     private bool obstacleCounted = false;
     private BirdPhysics playerBird;
     private Collider2D obstacleCollider;
@@ -18,7 +17,6 @@ public class ObstaclePhysics : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        mainCamera = Camera.main;
         // Assign velocity at obstacle's rigidbody
         obstacleBody = GetComponent<Rigidbody2D>();
         obstacleBody.linearVelocity = Vector2.up * speed;
@@ -39,18 +37,12 @@ public class ObstaclePhysics : MonoBehaviour
         {
             playerBird.RegisterPassedObstacle();
             obstacleCounted = true;
-        }
-        float leftEdge = mainCamera.transform.position.x - mainCamera.orthographicSize * mainCamera.aspect;
-
-        if (transform.position.x < leftEdge - 1f)
-        {
-            Destroy(gameObject);
-        }
+        }        
     }
 
     void Reverse() 
     {
         // Invertim la direcció de la velocitat. És com canviar de sentit
         obstacleBody.linearVelocity *= -1;
-    }
+    }    
 }

@@ -10,10 +10,10 @@ public class EnemySpawner : MonoBehaviour
     Camera mainCamera;
 
     [SerializeField]
-    float minSpawnTime = 3f;
+    float minSpawnTime;
 
     [SerializeField]
-    float maxSpawnTime = 5f;
+    float maxSpawnTime;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

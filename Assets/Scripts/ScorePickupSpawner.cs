@@ -9,10 +9,10 @@ public class ScorePickupSpawner : MonoBehaviour
     Camera mainCamera;
 
     [SerializeField]
-    float minSpawnTime = 1.5f;
+    float minSpawnTime;
 
     [SerializeField]
-    float maxSpawnTime = 3f;
+    float maxSpawnTime;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
