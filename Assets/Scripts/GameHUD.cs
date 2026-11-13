@@ -6,20 +6,24 @@ public class GameHUD : MonoBehaviour
 {
     [SerializeField]
     BirdPhysics playerBird;
-    
+
     [SerializeField]
     TMP_Text timeText;
-    
+
     [SerializeField]
     TMP_Text livesText;
-    
+
     [SerializeField]
     TMP_Text scoreText;
-    
+
     [SerializeField]
     TMP_Text obstaclesText;
 
     private float gameTime = 0f;
+    public float GameTime 
+    {
+        get { return this.gameTime; }
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class BirdPhysics : MonoBehaviour
 {
@@ -20,6 +19,9 @@ public class BirdPhysics : MonoBehaviour
 
     [SerializeField]
     float fastSpeed = 3.0f;
+
+    [SerializeField]
+    GameManager gameManager;
 
     float horizontalInput;
     const int MAXLIVES = 5;
@@ -53,26 +55,29 @@ public class BirdPhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) 
+        if (Time.timeScale > 0f)
         {
-            // Flap cap amunt
-            birdBody.AddForce(Vector2.up * force);
-        }
-        horizontalInput = 0f;
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                // Flap cap amunt
+                birdBody.AddForce(Vector2.up * force);
+            }
+            horizontalInput = 0f;
 
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            horizontalInput += 1f;
-        }
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                horizontalInput += 1f;
+            }
 
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            horizontalInput -= 1f;
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                horizontalInput -= 1f;
+            }
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);        
+        gameManager.ShowGameOver();
     }
     
     private void OnTriggerEnter2D(Collider2D collision)
@@ -100,11 +105,10 @@ public class BirdPhysics : MonoBehaviour
     void TakeDamage() 
     {
         currentLives--;
-        if(currentLives <= 0) 
+        if (currentLives <= 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            gameManager.ShowGameOver();
         }
-        Debug.Log(currentLives);
     }
     void Heal() 
     {
@@ -121,12 +125,10 @@ public class BirdPhysics : MonoBehaviour
     void AddScore() 
     {
         score = score + 10;
-        Debug.Log(score);
     }
     public void RegisterPassedObstacle() 
     {
         obstaclePassed++;
-        Debug.Log(obstaclePassed);
     }
     void FixedUpdate()
     {
