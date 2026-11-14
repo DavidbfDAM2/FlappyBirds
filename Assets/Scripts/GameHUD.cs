@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameHUD : MonoBehaviour
 {
@@ -18,13 +17,11 @@ public class GameHUD : MonoBehaviour
 
     [SerializeField]
     TMP_Text obstaclesText;
+    
+    [SerializeField]
+    GameSceneController sceneController;
 
-    private float gameTime = 0f;
-    public float GameTime 
-    {
-        get { return this.gameTime; }
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of Update after the MonoBehaviour is created    
     void Start()
     {
         
@@ -33,15 +30,14 @@ public class GameHUD : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameTime = gameTime + Time.deltaTime;
-        int totalSeconds = Mathf.FloorToInt(gameTime);
+        int totalSeconds = Mathf.FloorToInt(sceneController.GameTime);           // acumulem el temps de joc i actualitzem els textos de vides, punts, obstacles i cronometre
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds / 60) % 60;
         int seconds = totalSeconds % 60;
 
-        obstaclesText.text = $"Obstacles superats: {playerBird.ObstaclesPassed}";
-        scoreText.text = $"Puntuació: {playerBird.Score}";
-        livesText.text = $"Vides: {playerBird.CurrentLives}";
-        timeText.text = $"Temps de partida: {hours:00}:{minutes:00}:{seconds:00}";
+        obstaclesText.text  = $"Obstacles superats: {playerBird.ObstaclesPassed}";
+        scoreText.text      = $"Puntuació: {playerBird.Score}";
+        livesText.text      = $"Vides: {playerBird.CurrentLives}";
+        timeText.text       = $"Temps de partida: {hours:00}:{minutes:00}:{seconds:00}";
     }
 }

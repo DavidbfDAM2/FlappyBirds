@@ -1,8 +1,8 @@
 using UnityEngine;
+using System.Collections;
 
 public class BirdPhysics : MonoBehaviour
 {
-    // Bird's health points
     [SerializeField]
     int currentLives = 5;
     
@@ -19,10 +19,25 @@ public class BirdPhysics : MonoBehaviour
 
     [SerializeField]
     float fastSpeed = 3.0f;
+    
+    [SerializeField]
+    AudioClip flapSound;
 
     [SerializeField]
-    GameManager gameManager;
+    AudioClip hitSound;
 
+    [SerializeField]
+    AudioClip healSound;
+
+    [SerializeField]
+    AudioClip pickupSound;
+    AudioSource audioSource;
+
+    [SerializeField]
+    GameSceneController sceneController;
+    
+    SpriteRenderer birdRenderer;
+    bool isBlinking;
     float horizontalInput;
     const int MAXLIVES = 5;
     int score = 0;
@@ -47,90 +62,39 @@ public class BirdPhysics : MonoBehaviour
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
+    {   audioSource = GetComponent<AudioSource>();        // obte els components de locell i li asigna una velocitat      
+        birdRenderer = GetComponent<SpriteRenderer>();    
         birdBody = GetComponent<Rigidbody2D>();
         birdBody.linearVelocity = Vector2.right * speed;
     }
 
     // Update is called once per frame
-    void Update()
+    void Update()   
     {
-        if (Time.timeScale > 0f)
+        if (sceneController.IsPlaying)        // gestionem els controls
         {
             if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 // Flap cap amunt
                 birdBody.AddForce(Vector2.up * force);
+                audioSource.PlayOneShot(flapSound);
             }
+
             horizontalInput = 0f;
 
             if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
-                horizontalInput += 1f;
+                horizontalInput = horizontalInput + 1f;
             }
 
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
-                horizontalInput -= 1f;
+                horizontalInput = horizontalInput - 1f;
             }
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        gameManager.ShowGameOver();
-    }
-    
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.GetComponent<ButterflyPhysics>()) 
-        {
-            Heal();
-            Destroy(collision.gameObject);
-        }
-        
-        EnemyBirdPhysics enemy = collision.GetComponentInParent<EnemyBirdPhysics>();
-        if(enemy != null)
-        {
-            TakeDamage();
-            collision.enabled = false;
-            enemy.ReceiveHit();
-        }
-        if (collision.gameObject.GetComponent<ScorePickup>()) 
-        {
-            AddScore();
-            Destroy(collision.gameObject);
-        }
 
-    }
-    void TakeDamage() 
-    {
-        currentLives--;
-        if (currentLives <= 0)
-        {
-            gameManager.ShowGameOver();
-        }
-    }
-    void Heal() 
-    {
-        if(currentLives < MAXLIVES) 
-        {
-            currentLives++;
-        }
-    }
-    public bool NeedsHealing() 
-    {
-        return currentLives < MAXLIVES;
-    }
-
-    void AddScore() 
-    {
-        score = score + 10;
-    }
-    public void RegisterPassedObstacle() 
-    {
-        obstaclePassed++;
-    }
-    void FixedUpdate()
+    void FixedUpdate()                      // apliquem la velocitat horitzontal seleccionada sense alterar la velocitat vertical
     {
         float targetSpeed = speed;
 
@@ -144,5 +108,100 @@ public class BirdPhysics : MonoBehaviour
         }
 
         birdBody.linearVelocity = new Vector2(targetSpeed, birdBody.linearVelocity.y);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)      // acabem la partida amb una colisio + reproduim el so de limpacte
+    {
+        if (sceneController.IsPlaying)
+        {
+            sceneController.ShowGameOver();
+            audioSource.PlayOneShot(hitSound);
+        }
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)     // gestionem la recollida de vides i punts i la colisio amb enemics
+    {
+        if (sceneController.IsPlaying)
+        {
+            if (collision.gameObject.GetComponent<ButterflyPhysics>())
+            {
+                Heal();
+                Destroy(collision.gameObject);
+            }
+
+            EnemyBirdPhysics enemy = collision.GetComponentInParent<EnemyBirdPhysics>();
+
+            if (enemy != null)
+            {
+                TakeDamage();
+                collision.enabled = false;
+                enemy.ReceiveHit();
+            }
+            if (sceneController.IsPlaying && collision.gameObject.CompareTag("ScorePickup"))
+            {
+                AddScore();
+                Destroy(collision.gameObject);
+            }
+        }
+    }
+
+    void TakeDamage()               
+    {
+        currentLives--;                     // restem una vida, reprodueim limpacte i activa el parpelleig o el 'game over'
+        audioSource.PlayOneShot(hitSound);
+
+        if(currentLives > 0 && !isBlinking) 
+        {
+            StartCoroutine(BlinkAfterHit());
+        }
+
+        if (currentLives <= 0)
+        {
+            sceneController.ShowGameOver();
+        }
+    }
+    
+    void Heal()     
+    {
+        if(currentLives < MAXLIVES)         // recuperem una vida i reprodueim el so de curacio si NO hem arribat al maxim de vides
+        {
+            currentLives++;
+            audioSource.PlayOneShot(healSound);
+        }
+    }
+    
+    public bool NeedsHealing()              // indica si locell te menys vides que el maxim permes
+    {
+        return currentLives < MAXLIVES;
+    }
+
+    void AddScore()                         // sumem deu punts i reprodueim el so de recollida del 'pickup'
+    {
+        score = score + 10;
+        audioSource.PlayOneShot(pickupSound);
+    }
+    
+    public void RegisterPassedObstacle()     // incrementem el comptador dobstacles superats
+    {
+        if (sceneController.IsPlaying)
+        {
+            obstaclePassed++;
+        }
+    }
+        
+    IEnumerator BlinkAfterHit()             // corutina; parpalleig tres vegades despres dun impacte, sense alterar la fisica; alternem la visibilitat tres vegades amb esperes de temps real
+    {
+        isBlinking = true;
+
+        for (int i = 0; i < 3; i++)
+        {
+            birdRenderer.enabled = false;
+            yield return new WaitForSecondsRealtime(0.1f);
+
+            birdRenderer.enabled = true;
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+
+        isBlinking = false;
     }
 }

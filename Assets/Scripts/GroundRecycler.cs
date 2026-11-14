@@ -12,8 +12,8 @@ public class GroundRecycler : MonoBehaviour
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
-        mainCamera = Camera.main;
+    {    
+        mainCamera  = Camera.main;                       // obtenim la camera i calculem lamplada i el limit dret del tram a partir del seu colisionador
         groundCollider = GetComponent<Collider2D>();
         groundWidth = groundCollider.bounds.size.x;
         groundBound = groundCollider.bounds.max.x;
@@ -23,7 +23,8 @@ public class GroundRecycler : MonoBehaviour
     void Update()
     {
         float leftEdge = mainCamera.transform.position.x - mainCamera.orthographicSize * mainCamera.aspect;
-        if (groundBound < leftEdge) 
+        
+        if (groundBound < leftEdge)                     // recoloquem el tram davant quan queda fora de la camera per repetir el terra o el sostre
         {
             float displacement = (groundWidth - overlap) * 2f;
             transform.position = transform.position + Vector3.right * displacement;

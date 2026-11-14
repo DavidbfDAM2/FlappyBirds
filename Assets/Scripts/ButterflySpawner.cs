@@ -13,10 +13,11 @@ public class ButterflySpawner : MonoBehaviour
 
     [SerializeField]
     BirdPhysics playerBird;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    // Start is called once before the first execution of Update after the MonoBehaviour is created    
     void Start()
     {
-        InvokeRepeating("SpawnButterfly", 2, spawnTime);      
+        InvokeRepeating("SpawnButterfly", 2, spawnTime);      // intents periodics de generar papallones, començant al cap de dos segons de joc
     }
 
     // Update is called once per frame
@@ -27,7 +28,7 @@ public class ButterflySpawner : MonoBehaviour
 
     void SpawnButterfly() 
     {
-        if (playerBird.NeedsHealing()) 
+        if (playerBird.NeedsHealing()) // creem una papallona davant de la camera a una altura aleatoria (en cas que el jugador no tingui el maxim de vides)
         {
             float minY = mainCamera.transform.position.y - mainCamera.orthographicSize + 1.5f;
             float maxY = mainCamera.transform.position.y + mainCamera.orthographicSize - 1.5f;

@@ -46,6 +46,11 @@ La pausa atura el temps de joc i la física; no suma temps de supervivència. Es
 
 ## Funcionalitats
 
+- Efectes de so estil retro per a l'impuls, els impactes, la recuperació de vida i la recollida de punts.
+- Música de fons d'estil 8 bits, reproduïda en bucle i sense reiniciar-se entre partides.
+- Parpelleig de l'ocell en rebre mal, com a feedback visual.
+- Direcció vertical inicial aleatòria dels obstacles, amb canvis de sentit a intervals fixos.
+- Gestor persistent amb patró singleton per conservar els rècords i coordinar el reinici directe.
 - Moviment amb física 2D, gravetat i impulsos verticals.
 - Avanç automàtic amb acceleració i frenada temporals.
 - Càmera amb desplaçament horitzontal suau: l'ocell queda més endavant en accelerar i més enrere en frenar.
@@ -100,7 +105,7 @@ Una descàrrega ZIP no sempre inclou els continguts reals dels fitxers LFS; és 
 
 1. A Unity Hub, afegeix la carpeta que conté **`Assets/`, `Packages/` i `ProjectSettings/`**.
 2. Obre-la amb Unity **6000.3.24f1** i espera que s'importin els recursos i es resolguin els paquets.
-3. Obre [`Assets/Scenes/MainScene.unity`](../Assets/Scenes/MainScene.unity).
+3. Obre [`Assets/Scenes/MainScene.unity`](Assets/Scenes/MainScene.unity).
 4. Prem **Play** i dona el focus a la finestra **Game**.
 5. Prem **Enter** o el botó de començar.
 
@@ -116,6 +121,8 @@ Les rutes següents són relatives a l'arrel del projecte Unity:
 | `Assets/Scripts/` | Lògica de joc, física, càmera, interfície i generadors. |
 | `Assets/Prefabs/` | Objectes reutilitzables del joc. |
 | `Assets/Sprites/` | Recursos gràfics 2D. |
+| `Assets/Audio/SFX/` | Efectes de so de les accions del jugador. |
+| `Assets/Audio/Music/` | Música de fons. |
 | `Packages/` | Dependències gestionades per Unity. |
 | `ProjectSettings/` | Configuració i versió del projecte. |
 | `docs/` | Fitxers de la compilació web existent. |
@@ -124,17 +131,20 @@ Les rutes següents són relatives a l'arrel del projecte Unity:
 
 | Script | Responsabilitat |
 | --- | --- |
-| `GameManager.cs` | Estats, panells, pausa, reinici, resultats i desament dels rècords. |
-| `BirdPhysics.cs` | Controls, velocitat, vides, puntuació i detecció de col·lisions. |
-| `GameHUD.cs` | Marcador i cronòmetre de la partida. |
+| `GameManager.cs` | Singleton persistent: conserva els rècords, els desa amb 'PlayerPrefs' i manté la indicació de reinici directe. |
+| `GameHUD.cs` | Mostra les vides, la puntuació, els obstacles superats i el temps proporcionat pel controlador. |
+| `GameSceneController.cs` | Estats de partida, panells, pausa, cronòmetre, reinici i presentació dels resultats. |
 | `CameraScript.cs` | Seguiment i suavitzat de l'enquadrament horitzontal. |
-| `ObstacleSpawner.cs` | Generació d'obstacles amb intervals aleatoris. |
-| `EnemySpawner.cs` | Generació d'enemics amb intervals aleatoris. |
-| `ScorePickupSpawner.cs` | Generació de cuques de llum amb intervals aleatoris. |
-| `ButterflySpawner.cs` | Generació de papallones quan falta vida. |
+| `GroundRecycler.cs` | Reciclatge dels trams de terra i sostre. |
+| `BirdPhysics.cs` | Controls, velocitat, vides, puntuació i detecció de col·lisions. |
 | `EnemyBirdPhysics.cs` | Activació, moviment i reacció dels enemics al contacte. |
 | `ObstaclePhysics.cs` | Moviment dels obstacles i registre del pas del jugador. |
-| `GroundRecycler.cs` | Reciclatge dels trams de terra i sostre. |
+| `ButterflyPhysics.cs` | Moviment de les papallones de vida. |
+| `ObstacleSpawner.cs` | Generació d'obstacles. |
+| `EnemySpawner.cs` | Generació d'enemics. |
+| `ScorePickupSpawner.cs` | Generació de lluernes. |
+| `ButterflySpawner.cs` | Generació de papallones quan falta vida. |
+| `ObjectCleaner.cs` | Eliminació dels objectes generats quan queden darrere de la càmera. |
 
 ## Ajustar la dificultat
 
@@ -147,6 +157,12 @@ Els camps exposats a l'Inspector permeten ajustar les velocitats de l'ocell, la 
 
 ## Estat i possibles millores
 
-La base jugable inclou inici, pausa, Game Over, resultats i rècords persistents. Els **efectes de so** queden pendents.
+El joc inclou pantalla inicial amb instruccions, pausa, Game Over amb resultats, rècords persistents, música de fons i efectes de so. Els impactes amb enemics tenen feedback visual mitjançant un parpelleig de l'ocell.
 
-Possibles ampliacions: feedback visual en rebre mal, dificultat progressiva i comprovacions per evitar aparicions superposades.
+El cronòmetre només avança durant la partida. Els controls, les recollides i els impactes es condicionen a l'estat de joc, i la càmera deixa d'actualitzar-se durant els menús i la pausa.
+
+Possibles ampliacions:
+- Adaptació a navegadors mòbils i controls tàctils.
+- Dificultat progressiva.
+- Comprovacions per evitar aparicions superposades d'obstacles, enemics i objectes.
+- Controls de volum independents per a música i efectes.

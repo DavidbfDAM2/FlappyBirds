@@ -20,10 +20,10 @@ public class ObstacleSpawner : MonoBehaviour
     [SerializeField]
     float maxHeightSpawn;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Start is called once before the first execution of Update after the MonoBehaviour is created    
     void Start()
     {
-        Invoke(nameof(SpawnObstacle), 1f);
+        Invoke(nameof(SpawnObstacle), 1f);      // invoca el primer obstacle al cap dun segon de joc
     }
 
     // Update is called once per frame
@@ -33,7 +33,7 @@ public class ObstacleSpawner : MonoBehaviour
     }
     void SpawnObstacle() 
     {
-        float randomY = Random.Range(minHeightSpawn, maxHeightSpawn); 
+        float randomY = Random.Range(minHeightSpawn, maxHeightSpawn);     // generem un obstacle davant de la camera a una altura aleatoria i sortegem lespera fins al seguent
         
         float rightEdge = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect;
         Vector3 spawnPosition = new Vector3(rightEdge + 1f, randomY, 0f);

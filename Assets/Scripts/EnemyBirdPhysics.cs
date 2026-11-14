@@ -16,10 +16,11 @@ public class EnemyBirdPhysics : MonoBehaviour
     private BirdPhysics playerBird;
     private bool isActivated = false;
     private Camera mainCamera;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        mainCamera = Camera.main;
+        mainCamera = Camera.main;                           // localitzem la camera, el jugador i el cos fisic de lenemic
         enemyBody = GetComponent<Rigidbody2D>();
         playerBird = FindFirstObjectByType<BirdPhysics>();
     }
@@ -27,8 +28,8 @@ public class EnemyBirdPhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector2.Distance(transform.position, playerBird.transform.position); 
-        
+        float distance = Vector2.Distance(transform.position, playerBird.transform.position);     // activem lenemic quan el jugador sacosta + eliminem lenemic si cau per sota de la pantalla (si lenemic no colisiona amb el jugador i surt per lesquerra de la pantalla ja el nateja 'ObjectCleaner')
+                
         if(!isActivated && distance <= enemyActivationDistance) 
         {
             isActivated = true;
@@ -42,7 +43,8 @@ public class EnemyBirdPhysics : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void ReceiveHit() 
+    
+    public void ReceiveHit() // activem la gravetat de lenemic i limpulsem cap a la dreta despres de la colisio
     {
         isActivated = true;
         enemyBody.gravityScale = 1f;
