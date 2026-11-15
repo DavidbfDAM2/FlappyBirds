@@ -2373,10 +2373,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   currentLives: 5
-  speed: 3
+  speed: 2
   force: 200
-  slowSpeed: 1.5
-  fastSpeed: 6
+  slowSpeed: 1
+  fastSpeed: 5
   flapSound: {fileID: 8300000, guid: 1e4ec0e2f73834946be5780ca4e1c0fd, type: 3}
   hitSound: {fileID: 8300000, guid: a2b7cdda0a4251e4eb060d9829bfb2cf, type: 3}
   healSound: {fileID: 8300000, guid: 308f746bc8d5af54181123d44c6a16fe, type: 3}
@@ -4041,7 +4041,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleSpawner
   obstaclePrefab: {fileID: 6122989414059260220, guid: 670ac8781cf75534d906d40785e3f8ee, type: 3}
   mainCamera: {fileID: 519420031}
-  minSpawnTime: 0.9
+  minSpawnTime: 1.2
   maxSpawnTime: 1.5
   minHeightSpawn: -3.5
   maxHeightSpawn: 4.5
