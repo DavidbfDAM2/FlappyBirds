@@ -4,10 +4,10 @@ public class EnemyBirdPhysics : MonoBehaviour
 {
     //Movement speed 
     [SerializeField]
-    float speed = 2.0f;
+    float speed;
     
     [SerializeField]
-    float enemyActivationDistance = 7.0f;
+    float enemyActivationDistance;
     
     [SerializeField]
     float hitImpulse = 3f;
@@ -17,7 +17,7 @@ public class EnemyBirdPhysics : MonoBehaviour
     private bool isActivated = false;
     private Camera mainCamera;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Inicialitzem els components abans de la primera actualització.
     void Start()
     {
         mainCamera = Camera.main;                           // localitzem la camera, el jugador i el cos fisic de lenemic
@@ -25,10 +25,12 @@ public class EnemyBirdPhysics : MonoBehaviour
         playerBird = FindFirstObjectByType<BirdPhysics>();
     }
 
-    // Update is called once per frame
+    // Executem aquestes comprovacions a cada fotograma.
     void Update()
     {
-        float distance = Vector2.Distance(transform.position, playerBird.transform.position);     // activem lenemic quan el jugador sacosta + eliminem lenemic si cau per sota de la pantalla (si lenemic no colisiona amb el jugador i surt per lesquerra de la pantalla ja el nateja 'ObjectCleaner')
+        float distance, bottomEdge;
+
+        distance = Vector2.Distance(transform.position, playerBird.transform.position);     // activem lenemic quan el jugador sacosta + eliminem lenemic si cau per sota de la pantalla (si lenemic no colisiona amb el jugador i surt per lesquerra de la pantalla ja el nateja 'ObjectCleaner')
                 
         if(!isActivated && distance <= enemyActivationDistance) 
         {
@@ -36,7 +38,7 @@ public class EnemyBirdPhysics : MonoBehaviour
             enemyBody.linearVelocity = Vector2.left * speed;
         }
         
-        float bottomEdge = mainCamera.transform.position.y - mainCamera.orthographicSize;
+        bottomEdge = mainCamera.transform.position.y - mainCamera.orthographicSize;
 
         if (transform.position.y < bottomEdge - 1f)
         {

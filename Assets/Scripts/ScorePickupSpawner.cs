@@ -12,30 +12,34 @@ public class ScorePickupSpawner : MonoBehaviour
     float minSpawnTime;
 
     [SerializeField]
+    
     float maxSpawnTime;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created    
+    // Inicialitzem els components abans de la primera actualització.    
     void Start()
     {
         Invoke(nameof(SpawnScorePickup), 2f);// invoquem la primera lluerna (pickup) al cap de dos segons de joc
     }
 
-    // Update is called once per frame
+    // Executem aquestes comprovacions a cada fotograma.
     void Update()
     {        
     }
     
     void SpawnScorePickup()
     {
-        float minY = mainCamera.transform.position.y - mainCamera.orthographicSize + 1.5f;      // generem una lluerna (pickup) davant de la camera a una altura aleatoria i sortegem lespera fins al seguent
-        float maxY = mainCamera.transform.position.y + mainCamera.orthographicSize - 1.5f;
-        float randomY = Random.Range(minY, maxY);
+        float minY, maxY, randomY, rightEdge, nextSpawnTime;
+        Vector3 spawnPosition;
 
-        float rightEdge = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect;
-        Vector3 spawnPosition = new Vector3(rightEdge + 1f, randomY, 0f);
+        minY = mainCamera.transform.position.y - mainCamera.orthographicSize + 1.5f;      // generem una lluerna (pickup) davant de la camera a una altura aleatoria i sortegem lespera fins al seguent
+        maxY = mainCamera.transform.position.y + mainCamera.orthographicSize - 1.5f;
+        randomY = Random.Range(minY, maxY);
+
+        rightEdge = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect;
+        spawnPosition = new Vector3(rightEdge + 1f, randomY, 0f);
         Instantiate(scorePickupPrefab, spawnPosition, Quaternion.identity);
 
-        float nextSpawnTime = Random.Range(minSpawnTime, maxSpawnTime);
+        nextSpawnTime = Random.Range(minSpawnTime, maxSpawnTime);
         Invoke(nameof(SpawnScorePickup), nextSpawnTime);
     }
 }

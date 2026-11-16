@@ -346,7 +346,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.1, y: 15}
+  m_Size: {x: 0.1, y: 20.5}
   m_EdgeRadius: 0
 --- !u!4 &33631392
 Transform:
@@ -356,12 +356,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33631389}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.31, y: -1.78, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1145.5153, y: -859.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1074030143}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &33631393
 MonoBehaviour:
@@ -1177,7 +1177,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sortir
+  m_text: "Men\xFA inicial"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -1663,6 +1663,7 @@ MonoBehaviour:
   mainCamera: {fileID: 519420031}
   minSpawnTime: 2
   maxSpawnTime: 4
+  playerBird: {fileID: 599237850}
 --- !u!1 &461466126
 GameObject:
   m_ObjectHideFlags: 0
@@ -2138,8 +2139,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 159367454}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: ExitGame
+        m_TargetAssemblyTypeName: GameSceneController, Assembly-CSharp
+        m_MethodName: ReturnToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2195,7 +2196,7 @@ GameObject:
   - component: {fileID: 599237851}
   - component: {fileID: 599237852}
   m_Layer: 9
-  m_Name: birdPlayer
+  m_Name: PlayerBird
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2373,10 +2374,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   currentLives: 5
-  speed: 2
-  force: 200
   slowSpeed: 1
+  normalSpeed: 2
   fastSpeed: 5
+  force: 200
   flapSound: {fileID: 8300000, guid: 1e4ec0e2f73834946be5780ca4e1c0fd, type: 3}
   hitSound: {fileID: 8300000, guid: a2b7cdda0a4251e4eb060d9829bfb2cf, type: 3}
   healSound: {fileID: 8300000, guid: 308f746bc8d5af54181123d44c6a16fe, type: 3}
@@ -3453,6 +3454,7 @@ Transform:
   - {fileID: 1379422011}
   - {fileID: 2094384089}
   - {fileID: 366685075}
+  - {fileID: 33631392}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1085698037
@@ -3887,7 +3889,7 @@ GameObject:
   - component: {fileID: 1141926519}
   - component: {fileID: 1141926518}
   m_Layer: 5
-  m_Name: Button
+  m_Name: gameOverHeader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4041,10 +4043,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleSpawner
   obstaclePrefab: {fileID: 6122989414059260220, guid: 670ac8781cf75534d906d40785e3f8ee, type: 3}
   mainCamera: {fileID: 519420031}
-  minSpawnTime: 1.2
-  maxSpawnTime: 1.5
-  minHeightSpawn: -3.5
-  maxHeightSpawn: 4.5
+  minSpawnDistance: 3
+  maxSpawnDistance: 5.5
+  spawnMargin: 1
+  minHeightSpawn: -2.5
+  maxHeightSpawn: 3.5
 --- !u!1 &1264362628
 GameObject:
   m_ObjectHideFlags: 0
@@ -4499,7 +4502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScorePickupSpawner
   scorePickupPrefab: {fileID: 1775258875641382700, guid: 975adbd0fba57534fbe741618e05c191, type: 3}
   mainCamera: {fileID: 519420031}
-  minSpawnTime: 1.5
+  minSpawnTime: 2
   maxSpawnTime: 3
 --- !u!1001 &1486962990
 PrefabInstance:
@@ -4511,7 +4514,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 616266037135187548, guid: 2a75f8e5207e5b242aa6e969706ebfad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1090.5048
+      value: -1095.4528
       objectReference: {fileID: 0}
     - target: {fileID: 616266037135187548, guid: 2a75f8e5207e5b242aa6e969706ebfad, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4751,7 +4754,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1749384697
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4830,7 +4833,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1791401719
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5399,7 +5402,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 616266037135187548, guid: 2a75f8e5207e5b242aa6e969706ebfad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1131.572
+      value: -1136.52
       objectReference: {fileID: 0}
     - target: {fileID: 616266037135187548, guid: 2a75f8e5207e5b242aa6e969706ebfad, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5460,7 +5463,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3118438431157693645, guid: 704f880d88229f942a0f02b4557f043d, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5391006651220747306, guid: 704f880d88229f942a0f02b4557f043d, type: 3}
       propertyPath: m_Name
@@ -5522,4 +5525,3 @@ SceneRoots:
   - {fileID: 995330453}
   - {fileID: 599237850}
   - {fileID: 1911489818}
-  - {fileID: 33631392}

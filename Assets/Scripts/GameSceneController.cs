@@ -33,22 +33,22 @@ public class GameSceneController : MonoBehaviour
     {
         get { return this.gameTime; }
     }
-    void Awake() // sexecuta abans de Start()
+
+    void Awake() // sexecuta abans de 'Start()'
     {
         ChangeState(GameState.Start);    // posem lescena en lestat inicial amb les instruccions visibles i el temps aturat
-
     }
     
     void Start() 
     {
-        if (GameManager.instance.skipStartPanel)     // comsultem el gestor persistent i no mostrem les instruccions del joc si venim dun reinici
+        if (GameManager.instance.skipStartPanel)     // consultem el gestor persistent i no mostrem les instruccions del joc si venim dun reinici
         {
             GameManager.instance.skipStartPanel = false;
             StartGame();
         }
     }
 
-    // Update is called once per frame
+    // Executem aquestes comprovacions a cada fotograma.
     void Update()
     {
         if (IsPlaying) // nomes comptem el temps si estem en partida
@@ -132,7 +132,6 @@ public class GameSceneController : MonoBehaviour
     public void ResumeGame()
     {
         ChangeState(GameState.Playing);    // tornem a lestat de joc i reprenem el temps de la partida
-
     }
     
     public void RestartGame()
@@ -143,48 +142,33 @@ public class GameSceneController : MonoBehaviour
             StartCoroutine(ReloadGame());
         }
     }
+    public void ReturnToMainMenu()    // tornem al menu inicial evitant peticions duplicades
 
-    // corutina; esperem un fotograma abans diniciar el joc per evitar que el clic del boto impulsi locell; indiquem que someti el menu inicial i recarreguem lescena amb el temps aturat
-
-    IEnumerator ReloadGame()                                            // ------------->   EXEMPLES amb temps concret:   - esperar dos segons de temps de joc 'yield return new WaitForSeconds(2f);'
-    {                                                                   //                                                - esperar dos segons reals, fins i tot amb el joc pausat 'yield return new WaitForSecondsRealtime(2f);'
-        yield return null;      // esperem fins al seguent fotograma
-
-        GameManager.instance.skipStartPanel = true;
-        Time.timeScale = 0f;
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    IEnumerator BeginGame()     // corituna; esperem un fotograma abans dactivar el joc per evitar que el clic inicial doni un impuls
     {
-        yield return null;      // esperem fins al seguent fotograma
-
-        ChangeState(GameState.Playing);
+        if (!isRestarting)
+        {
+            isRestarting = true;
+            StartCoroutine(ReloadToMainMenu());
+        }
     }
-
-    public void ExitGame() 
-    {
-        Application.Quit();    // tanca laplicacio; no atura el mode 'Play' de leditor ni tanca la pestanya web 
-    }
-        
+    
     public void ShowGameOver()// aturem una partida activa, actualitzem els records i mostrem els resultats finals
     {
         if (currentState == GameState.Playing)
         {
-            ChangeState(GameState.GameOver);            
+            ChangeState(GameState.GameOver);
 
             GameManager.instance.UpdateRecords(playerBird.Score, gameTime);
 
-            resultsText.text =  "Puntuació: "                       + playerBird.Score +
-                                "\nObstacles superats: "            + playerBird.ObstaclesPassed +
-                                "\nTemps de partida: "              + FormatTime(gameTime) +
-                                "\n\nRècord de puntuació: "         + GameManager.instance.BestScore +
-                                "\nRècord de temps sobreviscut: "   + FormatTime(GameManager.instance.BestSurvivalTime) +
+            resultsText.text = "Puntuació: " + playerBird.Score +
+                                "\nObstacles superats: " + playerBird.ObstaclesPassed +
+                                "\nTemps de partida: " + FormatTime(gameTime) +
+                                "\n\nRècord de puntuació: " + GameManager.instance.BestScore +
+                                "\nRècord de temps sobreviscut: " + FormatTime(GameManager.instance.BestSurvivalTime) +
                                 "\n\nPrem 'Enter' o el botó 'Reiniciar partida' per tornar a jugar.";
         }
     }
-
+    
     string FormatTime(float time)      // convertim els segons a un text amb el format hores:minuts:segons sense decimals
     {
         int totalSeconds = Mathf.FloorToInt(time);
@@ -195,4 +179,32 @@ public class GameSceneController : MonoBehaviour
 
         return $"{hours:00}:{minutes:00}:{seconds:00}";
     }
+    
+    // corutina; esperem un fotograma i recarreguem lescena indicant que someti el panell inicial
+    IEnumerator ReloadGame()                                            // ------------->   EXEMPLES amb temps concret:   - esperem dos segons de temps de joc 'yield return new WaitForSeconds(2f);'
+    {                                                                   //                                                - esperem dos segons reals, fins i tot amb el joc pausat 'yield return new WaitForSecondsRealtime(2f);'
+        yield return null;      // esperem fins al seguent fotograma
+
+        GameManager.instance.skipStartPanel = true;
+        Time.timeScale = 0f;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    IEnumerator BeginGame()     // corutina; esperem un fotograma abans dactivar el joc per evitar que el clic inicial doni un impuls
+    {
+        yield return null;      // esperem fins al seguent fotograma
+
+        ChangeState(GameState.Playing);
+    }
+    IEnumerator ReloadToMainMenu()    // corutina; esperem un fotograma i recarreguem lescena mostrant les instruccions
+
+    {
+        yield return null;
+
+        GameManager.instance.skipStartPanel = false;
+        Time.timeScale = 0f;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }    
 }

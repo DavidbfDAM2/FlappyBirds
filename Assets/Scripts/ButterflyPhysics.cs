@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class ButterflyPhysics : MonoBehaviour
 {
-    //Movement speed 
+    // Velocitat de moviment 
     [SerializeField]
-    float speed = 2.0f;
+    float speed;
     
     Rigidbody2D butterflyBody;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created    
+    // Inicialitzem els components abans de la primera actualització.    
     void Start()
     {
         butterflyBody = GetComponent<Rigidbody2D>();            // obtenim el cos fisic de la papallona i li donem moviment cap a lesquerra
         butterflyBody.linearVelocity = Vector2.left * speed;
     }
 
-    // Update is called once per frame
+    // Executem aquestes comprovacions a cada fotograma.
     void Update()
     {        
     }

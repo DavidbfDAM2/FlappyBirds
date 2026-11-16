@@ -14,13 +14,13 @@ public class ButterflySpawner : MonoBehaviour
     [SerializeField]
     BirdPhysics playerBird;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created    
+    // Inicialitzem els components abans de la primera actualització.    
     void Start()
     {
-        InvokeRepeating("SpawnButterfly", 2, spawnTime);      // intents periodics de generar papallones, començant al cap de dos segons de joc
+        InvokeRepeating(nameof(SpawnButterfly), 2, spawnTime);      // intents periodics de generar papallones, començant al cap de dos segons de joc
     }
 
-    // Update is called once per frame
+    // Executem aquestes comprovacions a cada fotograma.
     void Update()
     {
         
@@ -28,14 +28,17 @@ public class ButterflySpawner : MonoBehaviour
 
     void SpawnButterfly() 
     {
+        float minY, maxY, randomY, rightEdge;
+        Vector3 spawnPosition;
+
         if (playerBird.NeedsHealing()) // creem una papallona davant de la camera a una altura aleatoria (en cas que el jugador no tingui el maxim de vides)
         {
-            float minY = mainCamera.transform.position.y - mainCamera.orthographicSize + 1.5f;
-            float maxY = mainCamera.transform.position.y + mainCamera.orthographicSize - 1.5f;
-            float randomY = Random.Range(minY, maxY);
+            minY = mainCamera.transform.position.y - mainCamera.orthographicSize + 1.5f;
+            maxY = mainCamera.transform.position.y + mainCamera.orthographicSize - 1.5f;
+            randomY = Random.Range(minY, maxY);
 
-            float rightEdge = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect;
-            Vector3 spawnPosition = new Vector3(rightEdge + 1f, randomY, 0f);
+            rightEdge = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect;
+            spawnPosition = new Vector3(rightEdge + 1f, randomY, 0f);
             Instantiate(butterflyPrefab, spawnPosition, Quaternion.identity);
         }        
     }

@@ -1,6 +1,11 @@
 # FlappyBirds
 
-Joc arcade 2D desenvolupat amb **Unity i C#**, inspirat en Flappy Bird. Mantén l'ocell en vol, ajusta la velocitat per esquivar obstacles i enemics, i recull cuques de llum per sumar punts.
+Versió: **1.0.0**
+**[Juga a FlappyBirds al navegador](https://davidbfdam2.github.io/FlappyBirds/)**
+
+El joc està pensat per jugar des del navegador en un PC, amb teclat i ratolí. Actualment no està adaptat a dispositius mòbils.
+
+Joc arcade 2D desenvolupat amb **Unity i C#**, inspirat en Flappy Bird. Mantén l'ocell en vol, ajusta la velocitat per esquivar obstacles i enemics i recull lluernes per sumar punts.
 
 El repte és doble: aconseguir la **millor puntuació** i superar el **temps màxim de supervivència**.
 
@@ -8,13 +13,13 @@ El repte és doble: aconseguir la **millor puntuació** i superar el **temps mà
 
 ## Com es juga
 
-L'ocell avança automàticament. Cada pulsació de vol aplica una força cap amunt; entre impulsos, la gravetat el fa baixar.
+L'ocell avança automàticament. Cada pulsació de vol aplica una força cap amunt; entre impulsos, la gravetat el fa caure.
 
 | Element | Efecte |
 | --- | --- |
-| Cuques de llum grogues | Sumen **10 punts** per recollida. |
+| Lluernes grogues | Sumen **10 punts** per recollida. |
 | Papallones | Recuperen **una vida**, fins a un màxim de cinc. Només es generen quan falta vida. |
-| Ocells enemics | Resten **una vida** en tocar el jugador. S'activen quan aquest s'hi acosta. |
+| Ocells enemics | Resten **una vida** en tocar el jugador. S'activen quan aquest s'hi apropa. |
 | Obstacles, terra i sostre | Una col·lisió sòlida provoca **Game Over**, independentment de les vides restants. |
 
 Quedar-se sense vides també acaba la partida. Superar barreres incrementa el comptador d'obstacles, separat de la puntuació.
@@ -25,46 +30,48 @@ Quedar-se sense vides també acaba la partida. Superar barreres incrementa el co
 | --- | --- |
 | Impuls cap amunt | **W**, **fletxa amunt** o **clic esquerre** |
 | Accelerar | Mantenir **D** o **fletxa dreta** |
-| Frenar sense retrocedir | Mantenir **A** o **fletxa esquerra** |
+| Frenar | Mantenir **A** o **fletxa esquerra** |
 | Recuperar la velocitat normal | Deixar anar els controls horitzontals |
 | Pausar o continuar | **Esc**, durant la partida |
-| Començar des del panell inicial | **Enter** o botó de començar |
-| Reiniciar des de Game Over | **Enter** o botó de reiniciar |
+| Començar des del panell inicial | **Enter** o botó **Iniciar partida** |
+| Reiniciar des de Game Over | **Enter** o botó **Reiniciar partida** |
 
 ## Menús i flux de partida
 
 1. **Inici:** mostra les instruccions i manté el joc aturat fins que el jugador decideix començar.
-2. **Partida:** el HUD mostra vides, punts, obstacles superats i temps de joc.
-3. **Pausa:** permet continuar, reiniciar o sortir.
+2. **Partida:** l'HUD mostra vides, punts, obstacles superats i temps de joc.
+3. **Pausa:** permet continuar, reiniciar o tornar al menú inicial.
 4. **Game Over:** mostra els resultats, els dos rècords de partida i la indicació per tornar a jugar.
 
-En reiniciar des de la pausa o des de Game Over, es carrega una partida nova **directament**, sense tornar a mostrar les instruccions inicials.
+En reiniciar des de la pausa o des de **Game Over**, es carrega una partida nova **directament**, sense tornar a mostrar les instruccions inicials.
 
-La pausa atura el temps de joc i la física; no suma temps de supervivència. Esc no permet saltar-se el panell inicial ni el de Game Over.
+La pausa atura el temps de joc i la física; no suma temps de supervivència. **Esc** no permet saltar-se el panell inicial ni el de Game Over.
 
-> **Sortir:** utilitza `Application.Quit()`. Tanca una compilació d'escriptori, però no atura el mode Play de l'Editor ni tanca la pestanya d'una versió web.
+Tornar al menú inicial abandona la partida i mostra de nou les instruccions. Les vides, la puntuació, el cronòmetre i els obstacles es reinicialitzen. Els rècords anteriors es conserven, però no s'actualitzen amb els resultats de la partida abandonada.
 
 ## Funcionalitats
 
-- Efectes de so estil retro per a l'impuls, els impactes, la recuperació de vida i la recollida de punts.
+- Efectes de so estil retro per l'impuls, els impactes, la recuperació de vida i la recollida de punts.
 - Música de fons d'estil 8 bits, reproduïda en bucle i sense reiniciar-se entre partides.
 - Parpelleig de l'ocell en rebre mal, com a feedback visual.
-- Direcció vertical inicial aleatòria dels obstacles, amb canvis de sentit a intervals fixos.
+- Direcció vertical inicial aleatòria dels obstacles, amb canvis de sentit en intervals fixos.
 - Gestor persistent amb patró singleton per conservar els rècords i coordinar el reinici directe.
 - Moviment amb física 2D, gravetat i impulsos verticals.
 - Avanç automàtic amb acceleració i frenada temporals.
 - Càmera amb desplaçament horitzontal suau: l'ocell queda més endavant en accelerar i més enrere en frenar.
 - Obstacles amb moviment vertical i generació a altures variables.
-- Intervals aleatoris, configurables des de l'Inspector, per generar obstacles, enemics i cuques de llum.
+- Obstacles generats amb una separació espacial aleatòria configurable, independent de la velocitat del jugador.
+- Enemics i lluernes generats amb intervals de temps aleatoris configurables.
+- Els enemics apareixen a l'alçada del jugador en el moment de generar-se.
 - Generació de papallones condicionada a la necessitat de recuperar vida.
-- Reciclatge de trams de terra i sostre per mantenir l'avanç continu.
+- Reciclatge de trams de terra i sostre per mantenir l'avanç continuat.
 - Eliminació d'elements generats que queden enrere.
 - Gestió de menús mitjançant un `enum` d'estats: `Start`, `Playing`, `Paused` i `GameOver`.
 - Rècords locals persistents de puntuació i supervivència.
 
-## Rècords i desament
+## Rècords 
 
-Els dos rècords són **independents**: no cal aconseguir-los en la mateixa partida. Es consulten i s'actualitzen en arribar a Game Over amb `PlayerPrefs`.
+Els dos rècords són **independents**: no cal aconseguir-los en la mateixa partida. Es consulten i s'actualitzen en arribar a Game Over amb `PlayerPrefs`. Abandonar voluntàriament una partida o reiniciar-la des del menú de pausa no actualitza els rècords.
 
 | Clau | Tipus | Contingut |
 | --- | --- | --- |
@@ -131,7 +138,7 @@ Les rutes següents són relatives a l'arrel del projecte Unity:
 
 | Script | Responsabilitat |
 | --- | --- |
-| `GameManager.cs` | Singleton persistent: conserva els rècords, els desa amb 'PlayerPrefs' i manté la indicació de reinici directe. |
+| `GameManager.cs` | Singleton persistent: conserva els rècords, els guarda amb `PlayerPrefs` i manté la indicació de reinici directe. |
 | `GameHUD.cs` | Mostra les vides, la puntuació, els obstacles superats i el temps proporcionat pel controlador. |
 | `GameSceneController.cs` | Estats de partida, panells, pausa, cronòmetre, reinici i presentació dels resultats. |
 | `CameraScript.cs` | Seguiment i suavitzat de l'enquadrament horitzontal. |
@@ -140,11 +147,11 @@ Les rutes següents són relatives a l'arrel del projecte Unity:
 | `EnemyBirdPhysics.cs` | Activació, moviment i reacció dels enemics al contacte. |
 | `ObstaclePhysics.cs` | Moviment dels obstacles i registre del pas del jugador. |
 | `ButterflyPhysics.cs` | Moviment de les papallones de vida. |
-| `ObstacleSpawner.cs` | Generació d'obstacles. |
-| `EnemySpawner.cs` | Generació d'enemics. |
+| `ObstacleSpawner.cs` | Generació d'obstacles per distància, amb separació entre ells i alçada aleatòries. |
+| `EnemySpawner.cs` | Generació d'enemics a l'alçada actual del jugador, amb intervals de temps aleatoris. |
 | `ScorePickupSpawner.cs` | Generació de lluernes. |
 | `ButterflySpawner.cs` | Generació de papallones quan falta vida. |
-| `ObjectCleaner.cs` | Eliminació dels objectes generats quan queden darrere de la càmera. |
+| `ObjectCleaner.cs` | Eliminació dels objectes generats quan queden darrere la càmera. |
 
 ## Ajustar la dificultat
 
@@ -153,7 +160,8 @@ Els camps exposats a l'Inspector permeten ajustar les velocitats de l'ocell, la 
 - Mantén els intervals de generació **positius**, amb el mínim menor o igual que el màxim.
 - Per conservar la frenada sense retrocés, utilitza velocitats positives i ordenades: lenta, normal i ràpida.
 - Els valors desats a les escenes i als prefabs poden ser diferents dels valors inicials dels scripts.
-- Prova les combinacions d'obstacles i enemics tant accelerant com frenant: la separació temporal no equival a una distància fixa.
+- Els obstacles es configuren per distància; els enemics, les lluernes i les papallones, per temps.
+- Accelerar redueix el temps disponible per reaccionar als obstacles, però no modifica el rang de separació entre ells.
 
 ## Estat i possibles millores
 

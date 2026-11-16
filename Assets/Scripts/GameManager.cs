@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;    //Guardem una instancia única i accessible per tothom del GameManager    
+    public static GameManager instance;     // guardem una instancia unica i accessible per tothom del GameManager    
     
-    public bool skipStartPanel;// indiquem si la nova escena ha de començar sense mostrar les instruccions
+    public bool skipStartPanel;             // indiquem si la nova escena ha de començar sense mostrar les instruccions
     int bestScore;
     float bestSurvivalTime;
 

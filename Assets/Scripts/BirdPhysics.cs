@@ -4,22 +4,22 @@ using System.Collections;
 public class BirdPhysics : MonoBehaviour
 {
     [SerializeField]
-    int currentLives = 5;
+    int currentLives;
     
-    //Movement speed 
+    // Velocitats de moviment
     [SerializeField]
-    float speed = 2.0f;
-
-    //Flap force
-    [SerializeField]
-    float force = 200.0f;
-    
-    [SerializeField]
-    float slowSpeed = 1.0f;
+    float slowSpeed;
 
     [SerializeField]
-    float fastSpeed = 3.0f;
+    float normalSpeed;
     
+    [SerializeField]
+    float fastSpeed;
+    
+    // Força de l'impuls
+    [SerializeField]
+    float force;
+        
     [SerializeField]
     AudioClip flapSound;
 
@@ -37,14 +37,17 @@ public class BirdPhysics : MonoBehaviour
     GameSceneController sceneController;
     
     SpriteRenderer birdRenderer;
+    Rigidbody2D birdBody;
+
     bool isBlinking;
     float horizontalInput;
     const int MAXLIVES = 5;
     int score = 0;
     int obstaclePassed = 0;
+    
     public float HorizontalInput
     {
-        get { return horizontalInput; }
+        get { return this.horizontalInput; }
     }
     public int CurrentLives
     {
@@ -56,19 +59,18 @@ public class BirdPhysics : MonoBehaviour
     }
     public int ObstaclesPassed 
     {
-        get { return obstaclePassed; }
+        get { return this.obstaclePassed; }
     }
-    Rigidbody2D birdBody;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Inicialitzem els components abans de la primera actualització.
     void Start()
-    {   audioSource = GetComponent<AudioSource>();        // obte els components de locell i li asigna una velocitat      
+    {   audioSource = GetComponent<AudioSource>();        // obtenim els components de locell i li assignem una velocitat      
         birdRenderer = GetComponent<SpriteRenderer>();    
         birdBody = GetComponent<Rigidbody2D>();
-        birdBody.linearVelocity = Vector2.right * speed;
+        birdBody.linearVelocity = Vector2.right * normalSpeed;
     }
 
-    // Update is called once per frame
+    // Executem aquestes comprovacions a cada fotograma.
     void Update()   
     {
         if (sceneController.IsPlaying)        // gestionem els controls
@@ -96,7 +98,7 @@ public class BirdPhysics : MonoBehaviour
 
     void FixedUpdate()                      // apliquem la velocitat horitzontal seleccionada sense alterar la velocitat vertical
     {
-        float targetSpeed = speed;
+        float targetSpeed = normalSpeed;
 
         if (horizontalInput > 0f)
         {
@@ -121,6 +123,8 @@ public class BirdPhysics : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)     // gestionem la recollida de vides i punts i la colisio amb enemics
     {
+        EnemyBirdPhysics enemy;
+
         if (sceneController.IsPlaying)
         {
             if (collision.gameObject.GetComponent<ButterflyPhysics>())
@@ -129,7 +133,7 @@ public class BirdPhysics : MonoBehaviour
                 Destroy(collision.gameObject);
             }
 
-            EnemyBirdPhysics enemy = collision.GetComponentInParent<EnemyBirdPhysics>();
+            enemy = collision.GetComponentInParent<EnemyBirdPhysics>();
 
             if (enemy != null)
             {
@@ -137,7 +141,7 @@ public class BirdPhysics : MonoBehaviour
                 collision.enabled = false;
                 enemy.ReceiveHit();
             }
-            if (sceneController.IsPlaying && collision.gameObject.CompareTag("ScorePickup"))
+            if (sceneController.IsPlaying && collision.gameObject.CompareTag("ScorePickup"))    // tornem a comprovar lestat perque podem haver acabat la partida en processar la colisio amb lenemic
             {
                 AddScore();
                 Destroy(collision.gameObject);
@@ -147,7 +151,7 @@ public class BirdPhysics : MonoBehaviour
 
     void TakeDamage()               
     {
-        currentLives--;                     // restem una vida, reprodueim limpacte i activa el parpelleig o el 'game over'
+        currentLives--;                     // restem una vida, reproduim limpacte i activem el parpelleig o el 'game over'
         audioSource.PlayOneShot(hitSound);
 
         if(currentLives > 0 && !isBlinking) 
@@ -163,19 +167,19 @@ public class BirdPhysics : MonoBehaviour
     
     void Heal()     
     {
-        if(currentLives < MAXLIVES)         // recuperem una vida i reprodueim el so de curacio si NO hem arribat al maxim de vides
+        if(currentLives < MAXLIVES)         // recuperem una vida i reproduim el so de curacio si NO hem arribat al maxim de vides
         {
             currentLives++;
             audioSource.PlayOneShot(healSound);
         }
     }
     
-    public bool NeedsHealing()              // indica si locell te menys vides que el maxim permes
+    public bool NeedsHealing()              // indiquem si locell te menys vides que el maxim permes
     {
         return currentLives < MAXLIVES;
     }
 
-    void AddScore()                         // sumem deu punts i reprodueim el so de recollida del 'pickup'
+    void AddScore()                         // sumem deu punts i reproduim el so de recollida del 'pickup'
     {
         score = score + 10;
         audioSource.PlayOneShot(pickupSound);
@@ -189,7 +193,7 @@ public class BirdPhysics : MonoBehaviour
         }
     }
         
-    IEnumerator BlinkAfterHit()             // corutina; parpalleig tres vegades despres dun impacte, sense alterar la fisica; alternem la visibilitat tres vegades amb esperes de temps real
+    IEnumerator BlinkAfterHit()             // corutina; parpelleig tres vegades despres dun impacte, sense alterar la fisica; alternem la visibilitat tres vegades amb esperes de temps real
     {
         isBlinking = true;
 
